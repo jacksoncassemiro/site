@@ -3,6 +3,6 @@ services:
     build:
       context: . 
       dockerfile: ./Dockerfile
-    # image: site:latest
+    image: jackdgls/site-stack:latest
     ports:
       - 80:80
