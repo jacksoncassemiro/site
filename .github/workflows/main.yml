@@ -1,0 +1,34 @@
+name: Build and Push Docker Image
+
+on:
+  push:
+    branches:
+      - main  # Monitorar alterações apenas na branch main
+
+jobs:
+  build-and-push:
+    name: Build and Push Docker Image
+    runs-on: ubuntu-latest
+
+    steps:
+    # Verificar o código do repositório
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    # Fazer login no Docker Hub
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }} # Configurar no GitHub Secrets
+        password: ${{ secrets.DOCKER_PASSWORD }} # Configurar no GitHub Secrets
+
+    # Configurar e buildar a imagem
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v4
+      with:
+        context: .
+        file: ./Dockerfile
+        push: true
+        tags: |
+          jackdgls/site:latest
+          jackdgls/site:${{ github.sha }}
